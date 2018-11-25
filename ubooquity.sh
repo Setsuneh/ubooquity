@@ -1,35 +1,50 @@
-#!/usr/bin/env bash
+#!/bin/bash
+# Compatible Debian 9 Stretch
+# GPL
 #
-# This file is copyright under the latest version of the EUPL.
-# Please see LICENSE file for your rights under this license.
+# Syntaxe: # su - -c "./debian-postinstall.sh"
+# Syntaxe: or # sudo ./debian-postinstall.sh
+VERSION="0.1"
 
-# Check if user is root
-if [ $(id -u) != "0" ]; then
-    echo "Error: You must be root to run this script, please use the root user to install the software."
-    exit 1
+# Test que le script est lance en root
+#-----------------------------------
+if [ $EUID -ne 0 ]; then
+  echo -e "\nLe script doit être lancé avec l'utilisateur root: # sudo $0" 1>&2
+  exit 1
 fi
 
-clear && clear
 
-# Download lastest versions
-apt-get update && apt-get dist-upgrade -y
-apt-get -y ca-certificates \
-	   software-properties-common \
- 	   python-software-properties \
-	   screen \
-	   nano \
-	   unzip 
+# Mise a jour de la liste des depots
+#-----------------------------------
 
-echo ""; set "132" "134"; FONCTXT "$1" "$2"; echo -e "${CBLUE}$TXT1${CEND}${CGREEN}$TXT2${CEND}"; echo ""
+# Update 
+echo -e "\n### Mise a jour de la liste des depots\n"
+apt update
 
-# Oracle Java Installation 
+# Upgrade
+echo -e "\n### Mise a jour du systeme\n"
+apt -y upgrade
+
+
+# Prerequies
+#-----------------------------------
+
+apt-get -y ca-certificates software-properties-common python-software-properties screen nano unzip 
+
+
+# Oracle Java Installation
+#-----------------------------------
+
 echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main" > /etc/apt/sources.list.d/webupd8team-java.list
 echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main" > /etc/apt/sources.list.d/webupd8team-java.list
 apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886
 apt-get update
 apt-get install oracle-java8-installer -y 
 
+
 # Files
+#-----------------------------------
+
 if [ ! -d "/home/tv" ];then
 	echo "Création du dosser Ubooquity";
 	mkdir /home/tv; 
