@@ -35,8 +35,8 @@ apt-get -y ca-certificates software-properties-common python-software-properties
 # Oracle Java Installation
 #-----------------------------------
 
-echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main" > /etc/apt/sources.list.d/webupd8team-java.list
-echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main" > /etc/apt/sources.list.d/webupd8team-java.list
+echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu $(lsb_release -sc) partner" > /etc/apt/sources.list.d/webupd8team-java.list
+echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu $(lsb_release -sc) partner" > /etc/apt/sources.list.d/webupd8team-java.list
 apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886
 apt-get update
 apt-get install oracle-java8-installer -y 
